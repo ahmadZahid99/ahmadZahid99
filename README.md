@@ -60,7 +60,7 @@ I am proficient in the following technologies:
 - **Top Languages**:  
 ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=ahmadZahid99&layout=compact&theme=dark&langs_count=10)  
 
-- **GitHub Streak**:  
+//- **GitHub Streak**:  
 ![GitHub Streak](https://streak-stats.demolab.com?user=ahmadZahid99&theme=dark&border_radius=5)
 
 ---
