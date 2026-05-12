@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Reply Settings — Wireframe · REVIEW-118</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; color: #1e293b; }
+
+  .topnav {
+    height: 56px; background: #fff; border-bottom: 1px solid #e2e8f0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  }
+  .topnav .logo { font-weight: 700; font-size: 15px; color: #1e293b; }
+  .topnav .logo span { color: #2563eb; }
+  .topnav .nav-right { display: flex; align-items: center; gap: 20px; }
+  .topnav .icon-btn {
+    width: 34px; height: 34px; border-radius: 8px; background: #f1f5f9;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+  }
+  .topnav .avatar {
+    width: 34px; height: 34px; border-radius: 50%; background: #2563eb;
+    color: #fff; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .layout { display: flex; margin-top: 56px; min-height: calc(100vh - 56px); }
+
+  .sidebar {
+    width: 220px; background: #fff; border-right: 1px solid #e2e8f0;
+    padding: 24px 0; position: fixed; top: 56px; bottom: 0; left: 0; overflow-y: auto;
+  }
+  .sidebar .section-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    color: #94a3b8; letter-spacing: 0.08em; padding: 0 16px 8px;
+  }
+  .sidebar .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+    font-size: 13.5px; color: #475569; cursor: pointer;
+    border-left: 3px solid transparent; transition: background 0.15s;
+  }
+  .sidebar .nav-item:hover { background: #f8fafc; color: #1e293b; }
+  .sidebar .nav-item.active {
+    background: #eff6ff; color: #2563eb; font-weight: 600; border-left-color: #2563eb;
+  }
+  .sidebar .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+  .sidebar .divider { height: 1px; background: #e2e8f0; margin: 12px 16px; }
+
+  .main { margin-left: 220px; padding: 32px 40px; flex: 1; }
+  .page-title { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+  .page-subtitle { font-size: 13px; color: #64748b; margin-bottom: 28px; }
+
+  .card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 28px 32px; max-width: 680px;
+  }
+  .card-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+  .card-subtitle { font-size: 13px; color: #64748b; margin-bottom: 20px; line-height: 1.5; }
+  .divider { height: 1px; background: #e2e8f0; margin-bottom: 24px; }
+
+  .form-group { margin-bottom: 22px; }
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .form-select {
+    width: 100%; padding: 10px 14px; font-size: 14px; border: 1px solid #d1d5db;
+    border-radius: 8px; background: #fff; color: #1e293b; appearance: none; outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px;
+  }
+  .form-select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  .form-hint { font-size: 12px; color: #94a3b8; margin-top: 5px; }
+
+  .form-textarea {
+    width: 100%; padding: 12px 14px; font-size: 14px; border: 1px solid #d1d5db;
+    border-radius: 8px; background: #fff; color: #1e293b;
+    resize: vertical; min-height: 140px; outline: none;
+    font-family: inherit; line-height: 1.6; transition: border 0.15s;
+  }
+  .form-textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  .form-textarea::placeholder { color: #9ca3af; }
+  .char-counter { text-align: right; font-size: 11.5px; color: #94a3b8; margin-top: 5px; }
+
+  .tip-box {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    border-radius: 8px; padding: 12px 14px; margin-top: 14px;
+  }
+  .tip-box .tip-icon { font-size: 15px; margin-top: 1px; }
+  .tip-box .tip-text { font-size: 12.5px; color: #1d4ed8; line-height: 1.5; }
+
+  .btn-row { display: flex; justify-content: flex-end; margin-top: 28px; }
+  .btn-save {
+    background: #2563eb; color: #fff; border: none; padding: 10px 22px;
+    border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  .btn-save:hover { background: #1d4ed8; }
+
+  .section-heading {
+    font-size: 13px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.07em; margin: 28px 0 14px;
+  }
+  .annotations { max-width: 680px; margin-top: 8px; }
+  .annotation {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px;
+  }
+  .annotation:last-child { border-bottom: none; }
+  .ann-num {
+    min-width: 24px; height: 24px; background: #2563eb; color: #fff;
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 700;
+  }
+  .ann-text { color: #374151; line-height: 1.5; }
+  .ann-text strong { color: #0f172a; }
+
+  .ticket-badge {
+    display: inline-block; background: #eff6ff; color: #2563eb;
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; border: 1px solid #bfdbfe; margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="logo">Business &amp; <span>Profile</span> Manager</div>
+  <div class="nav-right">
+    <div class="icon-btn">🔔</div>
+    <div class="icon-btn">🔄</div>
+    <div class="avatar">CK</div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="section-label">Menu</div>
+    <div class="nav-item"><span class="icon">🏢</span> Businesses</div>
+    <div class="nav-item"><span class="icon">⭐</span> Reviews</div>
+    <div class="nav-item"><span class="icon">🔗</span> Connections</div>
+    <div class="divider"></div>
+    <div class="section-label">Account</div>
+    <div class="nav-item active"><span class="icon">⚙️</span> Settings</div>
+  </div>
+
+  <div class="main">
+    <div class="page-title">Settings</div>
+    <div class="page-subtitle">Manage your account settings and preferences</div>
+
+    <div style="display:flex; gap:24px; align-items:flex-start;">
+
+      <!-- Settings sub-nav -->
+      <div style="width:190px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:8px 0; flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:9px;padding:10px 16px;font-size:13.5px;color:#475569;cursor:pointer;">
+          <span>👤</span> Profile Information
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;padding:10px 16px;font-size:13.5px;color:#475569;cursor:pointer;">
+          <span>🔒</span> Password &amp; Security
+        </div>
+        <div style="height:1px;background:#e2e8f0;margin:4px 12px;"></div>
+        <div style="display:flex;align-items:center;gap:9px;padding:10px 16px;font-size:13.5px;color:#2563eb;font-weight:600;background:#eff6ff;border-left:3px solid #2563eb;cursor:pointer;">
+          <span>🤖</span> AI Reply Settings
+        </div>
+      </div>
+
+      <!-- Form card -->
+      <div style="flex:1;">
+        <div class="card">
+          <div class="ticket-badge">REVIEW-118</div>
+          <div class="card-title">AI Reply Settings</div>
+          <div class="card-subtitle">Add custom instructions that the AI will follow when generating replies for this business.</div>
+          <div class="divider"></div>
+
+          <div class="form-group">
+            <label class="form-label">Select Business</label>
+            <select class="form-select">
+              <option>Al Noor Clinic — ✓ Saved</option>
+              <option>Al Baraka Restaurant — ✓ Saved</option>
+              <option>Downtown Sports Academy — Not configured</option>
+            </select>
+            <div class="form-hint">Choose the business you want to configure.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Custom Instructions</label>
+            <textarea class="form-textarea" placeholder="e.g. Always mention our 24/7 emergency line. Be empathetic with patients. Sign off with 'The Al Noor Care Team'. Avoid mentioning specific doctor names."></textarea>
+            <div class="char-counter">0 / 1000 characters</div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">
+              <strong>What to write here:</strong> Describe your business tone, specific phrases you want used, topics the AI should avoid, or how to sign off replies.
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-save">Save Changes</button>
+          </div>
+        </div>
+
+        <div class="section-heading">Design Notes</div>
+        <div class="annotations">
+          <div class="annotation">
+            <div class="ann-num">1</div>
+            <div class="ann-text"><strong>Entry point:</strong> "AI Reply Settings" is a 3rd item in the Settings sidebar — same style as "Profile Information" and "Password &amp; Security" above it.</div>
+          </div>
+          <div class="annotation">
+            <div class="ann-num">2</div>
+            <div class="ann-text"><strong>Business dropdown:</strong> Lists all businesses of the user. Businesses with saved instructions show "✓ Saved". Switching the dropdown reloads the textarea with that business's saved data (or blank if none).</div>
+          </div>
+          <div class="annotation">
+            <div class="ann-num">3</div>
+            <div class="ann-text"><strong>Textarea:</strong> Free-text, multi-line, max 1000 characters. Live character counter below (turns red when over limit). Save button is disabled if over 1000 chars.</div>
+          </div>
+          <div class="annotation">
+            <div class="ann-num">4</div>
+            <div class="ann-text"><strong>Save Changes:</strong> Shows loading spinner on click → success toast → data saved. Reuse the existing settings page button style.</div>
+          </div>
+          <div class="annotation">
+            <div class="ann-num">5</div>
+            <div class="ann-text"><strong>RTL / Arabic:</strong> Full mirror — labels align right, dropdown chevron flips, layout reverses. Must be validated in Arabic locale.</div>
+          </div>
+          <div class="annotation">
+            <div class="ann-num">6</div>
+            <div class="ann-text"><strong>Mobile:</strong> Settings sub-nav collapses to a tab bar or accordion. All fields stack full-width. Save button goes full-width at the bottom.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
